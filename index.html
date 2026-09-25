@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #F2EBD9; color: #1A1A1A; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  @keyframes scrollLine { 0% { transform: translateY(-100%); } 50% { transform: translateY(100%); } 100% { transform: translateY(100%); } }
+  @keyframes pageLoad { from { opacity: 0; } to { opacity: 1; } }
+  [data-reveal] { opacity: 1; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0F2419; }
+  ::-webkit-scrollbar-thumb { background: #BF8C18; border-radius: 3px; }
+  a { text-decoration: none; }
+</style>
+</helmet>
+
+<div id="zaraaRoot" style="animation: pageLoad 300ms ease-out; font-family: 'DM Sans', system-ui, sans-serif;">
+
+  <!-- ══ NAVBAR ══ -->
+  <header id="nav" style="position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: transparent; transition: background 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; height: 72px;">
+        <a href="#top" aria-label="Zara'a Agro Holdings — Home" style="display: flex; align-items: center;">
+          <img src="assets/logo.png" alt="Zara'a Agro Holdings" style="height: 56px; width: auto; object-fit: contain;">
+        </a>
+        <nav style="display: flex; align-items: center; gap: 4px;" aria-label="Main navigation">
+          <a href="#top" style="padding: 8px 12px; font-size: 15px; font-weight: 500; color: rgba(242,235,217,0.85);" style-hover="color: #BF8C18;">Home</a>
+          <a href="#about" style="padding: 8px 12px; font-size: 15px; font-weight: 500; color: rgba(242,235,217,0.85);" style-hover="color: #BF8C18;">About Us</a>
+          <a href="#divisions" style="display: inline-flex; align-items: center; gap: 4px; padding: 8px 12px; font-size: 15px; font-weight: 500; color: rgba(242,235,217,0.85);" style-hover="color: #BF8C18;">Our Divisions
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#news" style="padding: 8px 12px; font-size: 15px; font-weight: 500; color: rgba(242,235,217,0.85);" style-hover="color: #BF8C18;">News &amp; Insights</a>
+          <a href="#cta" style="padding: 8px 12px; font-size: 15px; font-weight: 500; color: rgba(242,235,217,0.85);" style-hover="color: #BF8C18;">Contact</a>
+        </nav>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="display: flex; align-items: center; border: 1px solid rgba(242,235,217,0.2); border-radius: 9999px; overflow: hidden;" role="group" aria-label="Language selection">
+            <button style="padding: 4px 12px; font-size: 12px; font-weight: 500; background: #BF8C18; color: #1B3F2C; border: none; cursor: pointer;">EN</button>
+            <button style="padding: 4px 12px; font-size: 12px; font-weight: 500; background: transparent; color: rgba(242,235,217,0.7); border: none; cursor: pointer;">FR</button>
+            <button style="padding: 4px 12px; font-size: 12px; font-weight: 500; background: transparent; color: rgba(242,235,217,0.7); border: none; cursor: pointer;">AR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ HERO ══ -->
+  <section id="top" style="position: relative; height: {{ heroScrollHeight }}; background: #1B3F2C;" aria-label="Hero" data-screen-label="Hero">
+   <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center;">
+    <div style="position: absolute; inset: 0;" aria-hidden="true">
+      <video id="brandVideo" ref="{{ videoRef }}" muted playsinline preload="auto" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+        <source src="assets/brand-film.mp4" type="video/mp4">
+      </video>
+      <canvas id="filmCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;"></canvas>
+      <div style="position: absolute; inset: 0; background: rgba(27,63,44,{{ videoTint }});"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 256px; background: linear-gradient(to top, rgba(27,63,44,0.6), transparent);"></div>
+    </div>
+    <div style="position: relative; z-index: 10; max-width: 1280px; margin: 0 auto; width: 100%; padding: 72px 40px 0;">
+      <div style="max-width: 768px;">
+        <p lang="ar" aria-hidden="true" style="color: rgba(191,140,24,0.6); font-size: 14px; letter-spacing: 0.2em; margin: 0 0 24px;">مجموعة زراعة</p>
+        <h1 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; color: #F2EBD9; line-height: 1.08; margin: 0 0 24px; font-size: clamp(2.5rem, 5.5vw, 5rem); letter-spacing: -0.02em;">From the soil,<br>we grow empires.</h1>
+        <p style="font-family: 'Bebas Neue', Impact, sans-serif; color: rgba(242,235,217,0.55); letter-spacing: 0.14em; margin: 0 0 40px; font-size: clamp(0.9rem, 1.6vw, 1.15rem);">PESTICIDES&nbsp;·&nbsp;GRAIN TRADING&nbsp;·&nbsp;DIESEL SUPPLY&nbsp;·&nbsp;AGRI-SERVICES</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+          <a href="#divisions" style="display: inline-flex; align-items: center; gap: 8px; background: #BF8C18; color: #1B3F2C; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 6px; transition: all 150ms;" style-hover="background: #A07615;">Explore Our Divisions
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#about" style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid #BF8C18; color: #BF8C18; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 6px; transition: all 150ms;" style-hover="background: #BF8C18; color: #1B3F2C;">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div style="position: absolute; left: 40px; right: 40px; bottom: 32px; z-index: 6; display: flex; align-items: center; gap: 16px;">
+      <span style="font-family: 'Bebas Neue', sans-serif; color: rgba(242,235,217,0.7); font-size: 12px; letter-spacing: 0.14em; white-space: nowrap;">SCROLL TO PLAY</span>
+      <div style="flex: 1; height: 2px; background: rgba(242,235,217,0.18); border-radius: 2px; overflow: hidden;">
+        <div id="filmProgress" style="height: 100%; width: 0%; background: #BF8C18; transition: width 80ms linear;"></div>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- ══ STATS ══ -->
+  <section id="stats" style="background: #F2EBD9;" aria-label="Key statistics" data-screen-label="Stats">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr);">
+        <div style="text-align: center; padding: 32px 24px; border-right: 1px solid #D8CDB0;">
+          <div class="stat-num" data-target="2024" data-static="1" data-prefix="Est. " style="font-family: 'Playfair Display', serif; font-weight: 700; color: #BF8C18; line-height: 1; margin-bottom: 12px; font-size: clamp(2.25rem, 4vw, 3.5rem);">Est. 2024</div>
+          <div style="font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(27,63,44,0.75);">Year Founded</div>
+        </div>
+        <div style="text-align: center; padding: 32px 24px; border-right: 1px solid #D8CDB0;">
+          <div class="stat-num" data-target="4" data-suffix="" style="font-family: 'Playfair Display', serif; font-weight: 700; color: #BF8C18; line-height: 1; margin-bottom: 12px; font-size: clamp(2.25rem, 4vw, 3.5rem);">4</div>
+          <div style="font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(27,63,44,0.75);">Business Divisions</div>
+        </div>
+        <div style="text-align: center; padding: 32px 24px; border-right: 1px solid #D8CDB0;">
+          <div class="stat-num" data-target="25" data-suffix="K+" style="font-family: 'Playfair Display', serif; font-weight: 700; color: #BF8C18; line-height: 1; margin-bottom: 12px; font-size: clamp(2.25rem, 4vw, 3.5rem);">25K+</div>
+          <div style="font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(27,63,44,0.75);">Tonnes Traded Annually</div>
+        </div>
+        <div style="text-align: center; padding: 32px 24px;">
+          <div class="stat-num" data-target="8" data-suffix="+" style="font-family: 'Playfair Display', serif; font-weight: 700; color: #BF8C18; line-height: 1; margin-bottom: 12px; font-size: clamp(2.25rem, 4vw, 3.5rem);">8+</div>
+          <div style="font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(27,63,44,0.75);">Governorates Served</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DIVISIONS ══ -->
+  <section id="divisions" style="background: #F2EBD9; padding: 96px 0;" aria-labelledby="divisions-heading" data-screen-label="Divisions">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px; margin-bottom: 56px;">
+      <h2 id="divisions-heading" data-reveal style="font-family: 'Playfair Display', serif; font-weight: 700; color: #1B3F2C; margin: 0; font-size: clamp(1.75rem, 3vw, 2.5rem);">Our Business Divisions</h2>
+      <p data-reveal style="color: rgba(26,26,26,0.7); font-size: 16px; line-height: 1.6; margin: 12px 0 0; max-width: 36rem;">Four integrated sectors, one holding group — united by a commitment to Tunisian agriculture.</p>
+    </div>
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+        <a href="#" class="div-card" data-reveal style="display: block; background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #D8CDB0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: box-shadow 200ms, transform 200ms; height: 100%;" style-hover="box-shadow: 0 8px 24px rgba(0,0,0,0.10); transform: translateY(-2px);">
+          <div style="color: #BF8C18; margin-bottom: 20px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5L5 6.5V12C5 16.1 8 19.8 12 21C16 19.8 19 16.1 19 12V6.5L12 2.5Z"/><path d="M8.5 14C9 11.5 11.5 10 14.5 10.5C14 13 11.5 14.5 8.5 14Z"/><line x1="10.5" y1="12.5" x2="13" y2="10"/></svg></div>
+          <h3 style="font-weight: 600; color: #1B3F2C; font-size: 17px; margin: 0 0 8px;">Pesticides</h3>
+          <p style="color: rgba(26,26,26,0.65); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">Certified crop protection products and distribution networks serving Tunisia's agricultural sector.</p>
+          <div style="display: flex; align-items: center; gap: 8px; color: #BF8C18; font-size: 13px; font-weight: 500;">Explore <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </a>
+        <a href="#" class="div-card" data-reveal style="display: block; background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #D8CDB0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: box-shadow 200ms, transform 200ms; height: 100%;" style-hover="box-shadow: 0 8px 24px rgba(0,0,0,0.10); transform: translateY(-2px);">
+          <div style="color: #BF8C18; margin-bottom: 20px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"/><path d="M8.5 17C8.5 15 10 13.5 12 13.5C14 13.5 15.5 15 15.5 17"/><path d="M7 13C7 11 9 9 12 9C15 9 17 11 17 13"/><path d="M8 9C8 7 9.8 5 12 5C14.2 5 16 7 16 9"/></svg></div>
+          <h3 style="font-weight: 600; color: #1B3F2C; font-size: 17px; margin: 0 0 8px;">Grain Trading</h3>
+          <p style="color: rgba(26,26,26,0.65); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">Strategic buying and selling of commodity grains across Tunisia's domestic and regional markets.</p>
+          <div style="display: flex; align-items: center; gap: 8px; color: #BF8C18; font-size: 13px; font-weight: 500;">Explore <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </a>
+        <a href="#" class="div-card" data-reveal style="display: block; background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #D8CDB0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: box-shadow 200ms, transform 200ms; height: 100%;" style-hover="box-shadow: 0 8px 24px rgba(0,0,0,0.10); transform: translateY(-2px);">
+          <div style="color: #BF8C18; margin-bottom: 20px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L7.5 9.5C5.8 11.5 5.5 13.5 6.5 15.5C7.7 17.8 9.7 19 12 19C14.3 19 16.3 17.8 17.5 15.5C18.5 13.5 18.2 11.5 16.5 9.5L12 3Z"/><path d="M9.5 14.5C9.5 16.2 10.6 17.5 12 17.5"/></svg></div>
+          <h3 style="font-weight: 600; color: #1B3F2C; font-size: 17px; margin: 0 0 8px;">Diesel Supply</h3>
+          <p style="color: rgba(26,26,26,0.65); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">Reliable fuel distribution ensuring uninterrupted energy supply for farming fleets and operations.</p>
+          <div style="display: flex; align-items: center; gap: 8px; color: #BF8C18; font-size: 13px; font-weight: 500;">Explore <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </a>
+        <a href="#" class="div-card" data-reveal style="display: block; background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #D8CDB0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: box-shadow 200ms, transform 200ms; height: 100%;" style-hover="box-shadow: 0 8px 24px rgba(0,0,0,0.10); transform: translateY(-2px);">
+          <div style="color: #BF8C18; margin-bottom: 20px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 12 9.5 9 7 7C8.5 7 11 9 12 12Z"/><path d="M12 12C12 12 14.5 9 17 7C15.5 7 13 9 12 12Z"/><path d="M7 20C7 17 9.2 15 12 15C14.8 15 17 17 17 20"/></svg></div>
+          <h3 style="font-weight: 600; color: #1B3F2C; font-size: 17px; margin: 0 0 8px;">Agri-Services</h3>
+          <p style="color: rgba(26,26,26,0.65); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">Field consulting, technical support, and seasonal agronomic services for farmers across the region.</p>
+          <div style="display: flex; align-items: center; gap: 8px; color: #BF8C18; font-size: 13px; font-weight: 500;">Explore <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT STRIP ══ -->
+  <section id="about" style="background: #fff;" aria-labelledby="about-heading" data-screen-label="About">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; min-height: 540px;">
+        <div style="display: flex; align-items: center; justify-content: center; background: #1B3F2C; padding: 64px 48px;">
+          <img src="assets/logo.png" alt="Zara'a Agro Holdings" style="width: 100%; max-width: 384px; height: auto;">
+        </div>
+        <div style="display: flex; align-items: center; background: #F2EBD9; padding: 80px 56px;">
+          <div style="max-width: 28rem;">
+            <h2 id="about-heading" data-reveal style="font-family: 'Playfair Display', serif; font-weight: 700; color: #1B3F2C; line-height: 1.15; margin: 0 0 24px; font-size: clamp(1.75rem, 2.5vw, 2.25rem);">About Zara'a Agro Holdings</h2>
+            <div data-reveal style="color: rgba(26,26,26,0.8); font-size: 15px; line-height: 1.75; display: flex; flex-direction: column; gap: 16px;">
+              <p style="margin: 0;">Zara'a Agro Holdings is a vertically integrated agricultural holding company headquartered in Tunisia, operating across four essential sectors that form the backbone of the national agricultural economy.</p>
+              <p style="margin: 0;">The group brings together pesticide distribution, grain trading, diesel supply, and field agri-services under one unified holding structure — creating synergies that benefit our clients, partners, and the Tunisian agricultural community.</p>
+              <p style="margin: 0;">Built on a foundation of trust and Tunisian heritage, our ambition extends beyond our borders while remaining firmly rooted in the land we serve.</p>
+            </div>
+            <a href="#" data-reveal style="display: inline-flex; align-items: center; gap: 8px; margin-top: 32px; background: #BF8C18; color: #1B3F2C; font-weight: 600; font-size: 15px; padding: 14px 28px; border-radius: 6px; transition: all 150ms;" style-hover="background: #A07615;">Read Our Story
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ NEWS ══ -->
+  <section id="news" style="background: #1B3F2C; padding: 96px 0;" aria-labelledby="news-heading" data-screen-label="News">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 56px;">
+        <h2 id="news-heading" data-reveal style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; margin: 0; font-size: clamp(1.75rem, 3vw, 2.5rem);">News &amp; Insights</h2>
+        <a href="#" data-reveal style="font-size: 14px; font-weight: 500; color: #BF8C18; display: flex; align-items: center; gap: 6px;" style-hover="color: #F2EBD9;">All Articles
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr);">
+        <div data-reveal style="padding: 0 32px 0 0; border-right: 1px solid rgba(242,235,217,0.15);">
+          <p style="font-family: 'Bebas Neue', sans-serif; color: #BF8C18; font-size: 13px; letter-spacing: 0.14em; margin: 0 0 16px;">JUNE 2025</p>
+          <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; line-height: 1.25; margin: 0 0 12px; font-size: clamp(1rem, 1.4vw, 1.2rem);"><a href="#" style="color: inherit;" style-hover="color: #BF8C18;">Zara'a Agro Secures Partnership for Expanded Grain Distribution</a></h3>
+          <p style="color: rgba(242,235,217,0.6); font-size: 14px; line-height: 1.6; margin: 0 0 20px; max-width: 52ch;">A new agreement broadens our grain trading network across northern and central Tunisia, strengthening supply chains for agricultural cooperatives.</p>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #BF8C18;" style-hover="color: #F2EBD9;">Read More <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div data-reveal style="padding: 0 32px; border-right: 1px solid rgba(242,235,217,0.15);">
+          <p style="font-family: 'Bebas Neue', sans-serif; color: #BF8C18; font-size: 13px; letter-spacing: 0.14em; margin: 0 0 16px;">APRIL 2025</p>
+          <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; line-height: 1.25; margin: 0 0 12px; font-size: clamp(1rem, 1.4vw, 1.2rem);"><a href="#" style="color: inherit;" style-hover="color: #BF8C18;">Pesticide Division Launches Certified Crop Protection Programme</a></h3>
+          <p style="color: rgba(242,235,217,0.6); font-size: 14px; line-height: 1.6; margin: 0 0 20px; max-width: 52ch;">Tunisian farmers gain access to certified crop protection products paired with on-field agronomic support throughout the growing season.</p>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #BF8C18;" style-hover="color: #F2EBD9;">Read More <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div data-reveal style="padding: 0 0 0 32px;">
+          <p style="font-family: 'Bebas Neue', sans-serif; color: #BF8C18; font-size: 13px; letter-spacing: 0.14em; margin: 0 0 16px;">JANUARY 2025</p>
+          <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; line-height: 1.25; margin: 0 0 12px; font-size: clamp(1rem, 1.4vw, 1.2rem);"><a href="#" style="color: inherit;" style-hover="color: #BF8C18;">Diesel Division Scales Capacity Ahead of Harvest Season</a></h3>
+          <p style="color: rgba(242,235,217,0.6); font-size: 14px; line-height: 1.6; margin: 0 0 20px; max-width: 52ch;">Expanded fuel distribution ensures uninterrupted energy supply to farming operations across the Sfax, Kairouan, and Medenine governorates.</p>
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #BF8C18;" style-hover="color: #F2EBD9;">Read More <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section id="cta" style="background: #0F2419; padding: 96px 0;" aria-labelledby="cta-heading" data-screen-label="CTA">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 40px; text-align: center;">
+      <h2 id="cta-heading" data-reveal style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; line-height: 1.15; margin: 0 0 16px; font-size: clamp(2rem, 4vw, 3.25rem);">Partner With Us</h2>
+      <p data-reveal style="color: rgba(242,235,217,0.6); font-size: 16px; line-height: 1.6; margin: 0 auto 40px; max-width: 32rem;">Whether you are a supplier, investor, or agri-business looking to strengthen your Tunisian network — we want to hear from you.</p>
+      <a href="#" data-reveal style="display: inline-flex; align-items: center; gap: 8px; background: #BF8C18; color: #1B3F2C; font-weight: 600; font-size: 15px; padding: 16px 32px; border-radius: 6px; transition: all 150ms;" style-hover="background: #A07615;">Get In Touch
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer style="background: #0F2419;" aria-label="Site footer">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 64px 40px 40px;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <div style="width: 32px; height: 32px; border-radius: 9999px; background: #BF8C18; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><span style="font-family: 'Playfair Display', serif; font-weight: 700; color: #1B3F2C; font-size: 16px; line-height: 1;">Z</span></div>
+            <div style="display: flex; flex-direction: column; line-height: 1;">
+              <span style="font-family: 'Playfair Display', serif; font-weight: 700; color: #F2EBD9; font-size: 13px; letter-spacing: 0.03em;">ZARA'A AGRO</span>
+              <span style="color: rgba(242,235,217,0.5); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;">Holdings</span>
+            </div>
+          </div>
+          <p style="color: rgba(242,235,217,0.45); font-size: 13px; line-height: 1.6; margin: 0;">Rooted in the Land. Built for Prosperity.</p>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: rgba(242,235,217,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 16px;">Our Divisions</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Pesticides</a></li>
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Grain Trading</a></li>
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Diesel Supply</a></li>
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Agri-Services</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: rgba(242,235,217,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 16px;">Company</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#top" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Home</a></li>
+            <li><a href="#about" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">About Us</a></li>
+            <li><a href="#news" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">News &amp; Insights</a></li>
+            <li><a href="#cta" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: rgba(242,235,217,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 16px;">Contact</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">Tunisia</a></li>
+            <li><a href="mailto:info@zaraaagro.tn" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">info@zaraaagro.tn</a></li>
+            <li><a href="#" style="color: rgba(242,235,217,0.65); font-size: 14px;" style-hover="color: #F2EBD9;">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid rgba(242,235,217,0.1); max-width: 1280px; margin: 0 auto; padding: 20px 40px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+        <p style="color: rgba(242,235,217,0.35); font-size: 12px; margin: 0;">© 2026 Zara'a Agro Holdings · مجموعة زراعة · Tunisia</p>
+        <div style="display: flex; gap: 20px;">
+          <a href="#" style="color: rgba(242,235,217,0.35); font-size: 12px;" style-hover="color: rgba(242,235,217,0.6);">Privacy Policy</a>
+          <a href="#" style="color: rgba(242,235,217,0.35); font-size: 12px;" style-hover="color: rgba(242,235,217,0.6);">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp float -->
+  <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp" style="position: fixed; bottom: 24px; right: 24px; z-index: 700; width: 56px; height: 56px; border-radius: 9999px; background: #BF8C18; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.10); transition: all 200ms;" style-hover="background: #A07615; transform: scale(1.1);">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#1B3F2C" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.524 5.847L0 24l6.35-1.501A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.954 0-3.77-.56-5.306-1.527l-.38-.228-3.765.89.937-3.665-.249-.396A9.937 9.937 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  </a>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;heroScrollVh&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:165,&quot;min&quot;:110,&quot;max&quot;:400,&quot;step&quot;:5,&quot;unit&quot;:&quot;vh&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero film&quot;,&quot;label&quot;:&quot;Scroll length (lower = faster)&quot;},&quot;videoTint&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.55,&quot;min&quot;:0,&quot;max&quot;:0.8,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero film&quot;,&quot;label&quot;:&quot;Video darkening&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      heroScrollHeight: (this.props.heroScrollVh ?? 165) + 'vh',
+      videoTint: this.props.videoTint ?? 0.55,
+      videoRef: (el) => {
+        this._video = el;
+        if (el) { el.muted = true; el.defaultMuted = true; el.volume = 0; el.setAttribute('muted', ''); }
+      },
+    };
+  }
+
+  componentDidMount() {
+    const root = document.getElementById('zaraaRoot');
+    if (!root) return;
+
+    // ── Navbar scroll state ──
+    const nav = document.getElementById('nav');
+    const onNavScroll = () => {
+      if (window.scrollY > 64) {
+        nav.style.background = '#1B3F2C';
+        nav.style.boxShadow = '0 2px 16px rgba(15,36,25,0.12)';
+      } else {
+        nav.style.background = 'transparent';
+        nav.style.boxShadow = 'none';
+      }
+    };
+    window.addEventListener('scroll', onNavScroll, { passive: true });
+    onNavScroll();
+
+    // ── Scroll-scrubbed brand film ──
+    const film = document.getElementById('top');
+    const video = this._video;
+    const progressBar = document.getElementById('filmProgress');
+    if (video) {
+      const forceMute = () => { video.muted = true; video.volume = 0; };
+      forceMute();
+      video.addEventListener('volumechange', forceMute);
+      video.addEventListener('play', forceMute);
+    }
+    const canvas = document.getElementById('filmCanvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    let targetProgress = 0;
+    let smoothProgress = 0;
+    let running = true;
+
+    // The mp4 has ~1 keyframe, so seeking deep into it takes 300ms+. Instead:
+    // play it through once (muted) at load, capture ~50 downscaled frames as
+    // ImageBitmaps, then scrub the canvas — every frame is instant after that.
+    const FRAME_COUNT = 50;
+    const frames = [];
+    let framesReady = false;
+    let drawnIndex = -1;
+    let capturing = false;
+    let finishing = false;
+
+    const finishCapture = () => {
+      if (finishing || framesReady) return;
+      finishing = true;
+      let waited = 0;
+      const finish = () => {
+        if (!running) return;
+        if (frames.some((f) => !f.bmp) && waited < 3000) { waited += 80; setTimeout(finish, 80); return; }
+        const good = frames.filter((f) => f.bmp);
+        frames.length = 0;
+        Array.prototype.push.apply(frames, good);
+        capturing = false;
+        video.pause();
+        if (frames.length > 4) {
+          framesReady = true;
+          drawnIndex = -1;
+          canvas.style.opacity = '1';
+          video.style.opacity = '0';
+        }
+      };
+      finish();
+    };
+
+    const captureFrames = () => {
+      if (!video || !ctx) return;
+      if (!video.requestVideoFrameCallback || !window.createImageBitmap) return; // fallback scrub stays active
+      capturing = true;
+      const step = video.duration / FRAME_COUNT;
+      let nextAt = 0;
+      const scale = Math.min(1, 900 / video.videoHeight);
+      const fw = Math.round(video.videoWidth * scale);
+      const fh = Math.round(video.videoHeight * scale);
+      const off = document.createElement('canvas');
+      off.width = fw; off.height = fh;
+      const offCtx = off.getContext('2d');
+      const onFrame = (now, meta) => {
+        if (!running || framesReady) return;
+        if (meta.mediaTime >= nextAt) {
+          nextAt += step;
+          offCtx.drawImage(video, 0, 0, fw, fh);
+          const slot = { t: meta.mediaTime, bmp: null };
+          frames.push(slot);
+          createImageBitmap(off).then((bmp) => { slot.bmp = bmp; }).catch(() => {});
+        }
+        // Near the end counts as done — 'ended' alone is easy to miss.
+        if (meta.mediaTime >= video.duration - step * 1.5) finishCapture();
+        else video.requestVideoFrameCallback(onFrame);
+      };
+      video.requestVideoFrameCallback(onFrame);
+      video.addEventListener('ended', finishCapture, { once: true });
+      video.playbackRate = 1;
+      video.play().catch(() => {});
+
+      // Watchdog: if playback stalls (hidden tab, autoplay hiccup), kick it;
+      // if it stalled right at the end, just finish with what we have.
+      let lastT = -1;
+      const watchdog = setInterval(() => {
+        if (!running || !capturing || framesReady) { clearInterval(watchdog); return; }
+        if (video.currentTime === lastT) {
+          if (video.currentTime >= video.duration - 0.3 || frames.length >= FRAME_COUNT - 2) finishCapture();
+          else video.play().catch(() => {});
+        }
+        lastT = video.currentTime;
+      }, 1200);
+      document.addEventListener('visibilitychange', () => {
+        if (capturing && !framesReady && document.visibilityState === 'visible') video.play().catch(() => {});
+      });
+    };
+
+    const drawFrame = (index) => {
+      const bmp = frames[index] && frames[index].bmp;
+      if (!bmp) return;
+      const cw = canvas.clientWidth, ch = canvas.clientHeight;
+      if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
+      // object-fit: cover
+      const s = Math.max(cw / bmp.width, ch / bmp.height);
+      const dw = bmp.width * s, dh = bmp.height * s;
+      ctx.drawImage(bmp, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      drawnIndex = index;
+    };
+
+    if (video) {
+      if (video.readyState >= 1) captureFrames();
+      else video.addEventListener('loadedmetadata', captureFrames, { once: true });
+    }
+
+    const onFilmScroll = () => {
+      const rect = film.getBoundingClientRect();
+      const total = film.offsetHeight - window.innerHeight;
+      targetProgress = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
+      if (progressBar) progressBar.style.width = (targetProgress * 100) + '%';
+    };
+    window.addEventListener('scroll', onFilmScroll, { passive: true });
+    window.addEventListener('resize', onFilmScroll, { passive: true });
+    onFilmScroll();
+
+    // Persistent render loop: ease toward the scroll position each frame.
+    let seekBusy = false;
+    let lastSeekTime = -1;
+    if (video) video.addEventListener('seeked', () => { seekBusy = false; });
+    const loop = () => {
+      if (!running) return;
+      window.__film = { frames: frames.length, ready: framesReady, drawn: drawnIndex, smooth: +smoothProgress.toFixed(3), target: +targetProgress.toFixed(3), ticks: (window.__film ? window.__film.ticks : 0) + 1 };
+      smoothProgress += (targetProgress - smoothProgress) * 0.22;
+      if (Math.abs(targetProgress - smoothProgress) < 0.0005) smoothProgress = targetProgress;
+      if (framesReady) {
+        const idx = Math.min(frames.length - 1, Math.round(smoothProgress * (frames.length - 1)));
+        if (idx !== drawnIndex) drawFrame(idx);
+        if (drawnIndex === idx && frames[idx] && !frames[idx].bmp) drawnIndex = -1;
+      } else if (video && isFinite(video.duration) && video.duration > 0 && !capturing && !seekBusy) {
+        // Fallback while frames are still caching: gated seeks.
+        const t = smoothProgress * (video.duration - 0.05);
+        if (Math.abs(t - lastSeekTime) > 0.04) {
+          seekBusy = true; lastSeekTime = t;
+          try { video.currentTime = t; } catch (e) { seekBusy = false; }
+        }
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+
+    // ── Stats count-up ──
+    const nums = root.querySelectorAll('.stat-num');
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        statObserver.unobserve(entry.target);
+        const el = entry.target;
+        if (el.dataset.static) return;
+        const target = parseInt(el.dataset.target, 10);
+        const suffix = el.dataset.suffix || '';
+        const prefix = el.dataset.prefix || '';
+        const duration = 1200;
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min((now - start) / duration, 1);
+          const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+          el.textContent = prefix + Math.floor(target * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.3 });
+    nums.forEach((n) => statObserver.observe(n));
+
+    // ── Reveal on scroll ──
+    const reveals = root.querySelectorAll('[data-reveal]');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    reveals.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (prefersReduced || (rect.top < window.innerHeight * 0.9 && rect.bottom > 0)) return;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+    });
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        revealObserver.unobserve(entry.target);
+        const el = entry.target;
+        requestAnimationFrame(() => {
+          el.style.transition = 'opacity 500ms cubic-bezier(0.16,1,0.3,1), transform 500ms cubic-bezier(0.16,1,0.3,1)';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    if (!prefersReduced) reveals.forEach((el) => revealObserver.observe(el));
+
+    this._cleanup = () => {
+      running = false;
+      window.removeEventListener('scroll', onNavScroll);
+      window.removeEventListener('scroll', onFilmScroll);
+      window.removeEventListener('resize', onFilmScroll);
+    };
+  }
+
+  componentWillUnmount() { if (this._cleanup) this._cleanup(); }
+}
+</script>
+</body>
+</html>
